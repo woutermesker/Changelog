@@ -8,9 +8,6 @@ import Delimiter from "@editorjs/delimiter";
 import List from "@editorjs/list";
 import SimpleImage from "@editorjs/simple-image";
 
-import dynamic from 'next/dynamic'
-
-
 export const EDITOR_JS_TOOLS = {
   embed: Embed,
   table: Table,

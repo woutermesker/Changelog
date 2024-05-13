@@ -4,7 +4,7 @@ import moment from "moment";
 
 import { createReactEditorJS } from "react-editor-js";
 
-import { EDITOR_JS_TOOLS } from "./constants";
+import { EDITOR_JS_TOOLS } from "../utils/constants";
 
 import "./styles.css";
 import "./stylesAnimdation.css";
