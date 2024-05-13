@@ -1,27 +1,28 @@
-// pages/api/hello.js
+var pg = require("pg");
+var conString =
+  "postgres://default:xa1EHGTWN7Yv@ep-young-math-a2uc03pq.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require";
+
+var client = new pg.Client(conString);
+if (!client._connected) {
+  await client.connect();
+}
 
 export default function handler(req, res) {
-  const posts = [
-    {
-      id: 1,
-      time: "2024-04-02T10:00:00Z",
-      title: "First Post",
-      topics: ["topic1", "topic2"],
-      author: "Wouter Mesker",
-      textBody:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.",
-    },
-    {
-      id: 2,
-      time: "2024-03-02T10:00:00Z",
-      title: "Second Post",
-      topics: ["topic3", "topic4"],
-      author: "Author2",
-      textBody:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae. */ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac efficitur sapien. In hac habitasse platea dictumst. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.",
-},
-    // Add more posts as needed
-  ];
+  try {
+  const selectQuery = `
+    SELECT * FROM posts
+  `;
 
-  res.status(200).json(posts);
+  client
+    .query(selectQuery)
+    .then((dbRes) => {
+      res.status(200).json(dbRes.rows);
+      client.end();
+    })
+    .catch((e) => console.error(e.stack));
+  } catch (e) {
+    console.error(e.stack);
+    res.status(500).json({ error: 'Database query failed' });
+    client.end();
+  }
 }
