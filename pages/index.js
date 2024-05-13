@@ -215,7 +215,8 @@ export default function Home() {
         )}
 
         {changelog.map((log) => (
-          <article
+          <article 
+            key={log.id}
             id="changelog-78011"
             className="d-flex gutter-spacious flex-wrap position-relative changelog-line js-ajax-fetchable post-78011 changelog type-changelog status-publish hentry changelog-label-copilot"
           >
